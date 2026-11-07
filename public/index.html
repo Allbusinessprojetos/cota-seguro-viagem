@@ -171,41 +171,34 @@ p{margin:0}
 
 /* ---------- hero (banners) ---------- */
 .hero{position:relative;background:var(--ink);overflow:hidden}
-/* altura do banner: tela inteira menos o cabeçalho e a parte da cotação que precisa aparecer junto */
-.slides{position:relative;width:100%;max-width:100%;aspect-ratio:1672/941;max-height:max(340px,calc(100svh - 72px - var(--quote-peek)));margin:0 auto;overflow:hidden}
-:root{--quote-peek:322px}
-.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease;overflow:hidden}
+/* imagem ocupa a largura toda; a altura é limitada pela tela para a cotação aparecer junto,
+   mas nunca corta mais que 25% de baixo da arte (onde fica só paisagem) */
+:root{--quote-peek:166px}
+.slides{position:relative;width:100%;max-width:100%;aspect-ratio:1672/941;max-height:max(calc(100vw * .5628 * .75),calc(100svh - 72px - var(--quote-peek)));overflow:hidden}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease;margin:0}
 .slide.on{opacity:1;z-index:1}
-.slide .blur{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(30px) saturate(1.15) brightness(.9);transform:scale(1.2)}
-.frame{position:relative;height:100%;max-width:100%;aspect-ratio:1672/941;margin:0 auto;overflow:hidden;box-shadow:0 0 60px 20px rgba(7,26,61,.25)}
-.frame img{width:100%;height:100%;object-fit:cover}
-.slide.on .frame img{animation:kb 7.5s ease-out forwards}
-@keyframes kb{from{transform:scale(1.05)}to{transform:scale(1)}}
-.slide-copy{position:absolute;right:5%;top:50%;transform:translateY(-50%);width:44%;display:grid;gap:clamp(6px,1.2vw,16px);color:var(--ink);text-align:center;justify-items:center}
-.slide-copy .k{font:800 clamp(10px,1.2vw,15px)/1 var(--f-display);letter-spacing:.32em;color:var(--ink);opacity:.85}
-.slide-copy .h{font:italic 600 clamp(18px,3.6vw,54px)/1.06 var(--f-display);color:var(--ink);text-shadow:0 1px 18px rgba(255,255,255,.55)}
-.slide-copy .h b{display:inline-block;font-weight:800;color:#fff;background:linear-gradient(120deg,var(--sky),#0950c4);padding:.04em .32em .1em;border-radius:.18em;margin-top:.12em;transform:skewX(-6deg)}
-.slide-copy .h b span{display:inline-block;transform:skewX(6deg)}
-.slide.on .slide-copy > *{animation:rise .9s var(--ease) both}
-.slide.on .slide-copy > *:nth-child(2){animation-delay:.15s}
-@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
-.dots{position:absolute;z-index:3;left:50%;transform:translateX(-50%);bottom:84px;display:flex;gap:10px}
+.slide img{width:100%;height:100%;object-fit:cover;object-position:center top;transform-origin:50% 50%}
+.slide.on img{animation:kb 7.5s ease-out forwards}
+@keyframes kb{from{transform:scale(1.03)}to{transform:scale(1)}}
+.dots{position:absolute;z-index:3;left:max(24px,env(safe-area-inset-left,0px));bottom:76px;display:flex;gap:10px}
 .dot{width:46px;height:5px;border-radius:9px;border:0;padding:0;background:rgba(255,255,255,.45);cursor:pointer;overflow:hidden;position:relative}
 .dot i{position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:left}
 .dot.on i{animation:prog 6.5s linear forwards}
 .paused .dot.on i{animation-play-state:paused}
 @keyframes prog{to{transform:scaleX(1)}}
-@media (max-width:700px){.dots{bottom:14px}.dot{width:30px;height:4px}}
+@media (max-width:700px){.dots{bottom:18px;left:16px}.dot{width:26px;height:4px}}
 
 /* ---------- cotação: cartão de embarque ---------- */
-.quote{position:relative;z-index:5;margin-top:-64px}
+.quote{position:relative;z-index:5;margin-top:-56px}
 @media (max-width:700px){.quote{margin-top:-10px}}
-.pass{display:grid;grid-template-columns:minmax(0,1fr) 250px;background:var(--card);border-radius:24px;box-shadow:0 30px 70px -30px rgba(7,26,61,.45),0 2px 0 rgba(7,26,61,.04);overflow:visible;position:relative}
+.pass{display:grid;grid-template-columns:minmax(0,1fr) 230px;background:var(--card);border-radius:24px;box-shadow:0 30px 70px -30px rgba(7,26,61,.45),0 2px 0 rgba(7,26,61,.04);overflow:visible;position:relative}
 .pass-main{padding:clamp(20px,2.4vw,28px) clamp(20px,3vw,34px);display:grid;gap:14px;min-width:0}
 .pass-main h1{font-size:clamp(24px,2.6vw,32px);font-weight:800;color:var(--ink)}
 .pass-main h1 em{color:var(--sky);font-style:italic}
 .pass-main .sub{color:var(--muted);margin-top:-8px;font-size:15px}
-.fields{display:grid;grid-template-columns:1.35fr 1fr 1fr 1fr 1fr;gap:12px}
+.fields{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr 1.05fr auto;gap:12px;align-items:end}
+.f-go .btn{height:50px;padding:0 26px;font-size:15px;white-space:nowrap}
+.pass-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 22px}
 .field{display:grid;gap:6px;min-width:0;position:relative}
 .field label,.field .lbl{font:700 11px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .ctrl{width:100%;height:50px;border:1.5px solid var(--line);border-radius:14px;background:#fbfdff;color:var(--text);font:600 15px/1 var(--f-body);padding:0 14px;transition:border-color .2s,box-shadow .2s;appearance:none;-webkit-appearance:none}
@@ -224,15 +217,13 @@ button.ctrl{text-align:left;cursor:pointer;display:flex;align-items:center;justi
 .step button:hover{border-color:var(--sky)}
 .step output{min-width:18px;text-align:center;font:700 16px/1 var(--f-mono)}
 .pax-pop .btn{margin-top:6px;padding:12px}
-.pass-actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px}
-.pass-actions .btn-primary{padding:16px 32px;font-size:16px}
-.ticks{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--muted);font-size:14px}
+.ticks{display:flex;flex-wrap:wrap;gap:6px 16px;color:var(--muted);font-size:13.5px}
 .ticks span{display:inline-flex;align-items:center;gap:7px}
 .ticks svg{width:16px;height:16px;color:var(--ok)}
-.hint{font-size:13.5px;line-height:1.45;color:var(--ink-2);background:#eaf3ff;border:1px solid #cfe2ff;border-radius:12px;padding:8px 12px}
+.hint{font-size:13px;line-height:1.4;color:var(--ink-2);background:#eaf3ff;border:1px solid #cfe2ff;border-radius:999px;padding:6px 14px}
 .hint[hidden]{display:none!important}
 /* canhoto */
-.stub{position:relative;background:linear-gradient(160deg,var(--ink),var(--ink-2));color:#e7f0ff;padding:24px 22px;display:grid;align-content:space-between;gap:18px;border-left:2px dashed rgba(255,255,255,.25);border-radius:0 24px 24px 0;overflow:hidden}
+.stub{position:relative;background:linear-gradient(160deg,var(--ink),var(--ink-2));color:#e7f0ff;padding:20px 22px;display:grid;align-content:space-between;gap:14px;border-left:2px dashed rgba(255,255,255,.25);border-radius:0 24px 24px 0;overflow:hidden}
 .stub::before,.stub::after{content:"";position:absolute;left:-14px;width:26px;height:26px;border-radius:50%;background:var(--paper)}
 .stub::before{top:-13px}.stub::after{bottom:-13px}
 .stub .lbl{font:700 10px/1 var(--f-mono);letter-spacing:.18em;color:#8fb3ec;text-transform:uppercase}
@@ -247,9 +238,22 @@ button.ctrl{text-align:left;cursor:pointer;display:flex;align-items:center;justi
 .barcode{height:44px;background:repeating-linear-gradient(90deg,#fff 0 2px,transparent 2px 4px,#fff 4px 5px,transparent 5px 9px,#fff 9px 12px,transparent 12px 14px);opacity:.85;border-radius:3px}
 .flash{animation:flash .6s var(--ease)}
 @keyframes flash{0%{color:var(--sun);transform:translateY(-4px)}100%{color:#fff;transform:none}}
-@media (max-width:1100px){.fields{grid-template-columns:1fr 1fr 1fr}.fields .f-dest{grid-column:span 2}}
+@media (min-width:1101px){
+  .quote .wrap{max-width:1340px}
+  .pass{grid-template-columns:minmax(0,1fr) 196px}
+  .pass-main .eyebrow,.pass-main .sub,.barcode,.stub > .lbl,.stub-grid .s-dates{display:none}
+  .pass-main{gap:12px;padding:20px 28px}
+  .pass-main h1{font-size:24px}
+  .fields{gap:10px}
+  .stub{padding:20px 20px;align-content:center;gap:16px}
+  .route b{font-size:24px}
+  .stub-grid{gap:10px}
+}
+.ctrl{white-space:nowrap}
+input[type=date].ctrl{padding:0 10px;font-size:14.5px}
+@media (max-width:1100px){.fields{grid-template-columns:1fr 1fr 1fr}.fields .f-dest{grid-column:span 2}.f-go{grid-column:1/-1}.f-go .btn{width:100%;height:54px;font-size:16px}.f-go .lbl{display:none}}
 @media (max-width:900px){.pass{grid-template-columns:1fr}.stub{border-left:0;border-top:2px dashed rgba(255,255,255,.25);border-radius:0 0 24px 24px}.stub::before,.stub::after{display:none}.stub-grid{grid-template-columns:repeat(4,1fr)}.barcode{display:none}}
-@media (max-width:620px){.fields{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}input[type=date].ctrl{padding:0 10px;font-size:14px}.fields .f-dest,.fields .f-pax,.fields .f-perfil{grid-column:1/-1}.stub-grid{grid-template-columns:1fr 1fr}.pass-actions .btn-primary{width:100%}}
+@media (max-width:620px){.fields{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}input[type=date].ctrl{padding:0 10px;font-size:14px}.fields .f-dest,.fields .f-pax,.fields .f-perfil{grid-column:1/-1}.stub-grid{grid-template-columns:1fr 1fr}}
 
 /* ---------- resultados ---------- */
 #resultado{padding-block:48px 24px;scroll-margin-top:80px}
@@ -435,7 +439,7 @@ footer .wrap{padding-block:56px 32px;display:grid;gap:36px}
 <header class="top" id="top">
   <div class="wrap">
     <a class="brand" href="#" aria-label="Cota Seguro Viagem, página inicial">
-      <img src="img/logo.webp" srcset="img/logo.webp 1x, img/logo@2x.webp 2x" width="560" height="196" alt="Cota Seguro Viagem">
+      <img src="img/logo.webp" srcset="img/logo.webp 1x, img/logo@2x.webp 2x" width="560" height="188" alt="Cota Seguro Viagem">
     </a>
     <nav class="nav" id="nav" aria-label="Menu principal">
       <a href="#cotar">Cotar</a>
@@ -454,28 +458,14 @@ footer .wrap{padding-block:56px 32px;display:grid;gap:36px}
   <!-- HERO: banners alternando -->
   <section class="hero" aria-label="Destaques">
     <div class="slides" id="slides">
-      <figure class="slide on" style="margin:0">
-        <img class="blur" src="img/rio-1672.webp" srcset="img/rio-960.webp 960w, img/rio-1672.webp 1672w" sizes="240px" width="1672" height="941" alt="" aria-hidden="true">
-        <div class="frame">
-          <img src="img/rio-1672.webp" srcset="img/rio-960.webp 960w, img/rio-1672.webp 1672w" sizes="100vw" width="1672" height="941" alt="Viajante sorrindo com mochila diante da baía de Guanabara e do Pão de Açúcar ao pôr do sol: viaje com liberdade e total segurança com a Cota Seguro Viagem" fetchpriority="high">
-        </div>
+      <figure class="slide on">
+        <img src="img/rio-1672.webp" srcset="img/rio-960.webp 960w, img/rio-1672.webp 1672w" sizes="100vw" width="1672" height="941" alt="Viajante sorrindo com mochila diante do Pão de Açúcar ao pôr do sol: viaje com liberdade e total segurança com a Cota Seguro Viagem" fetchpriority="high">
       </figure>
-      <figure class="slide" style="margin:0">
-        <img class="blur" src="img/paris-1672.webp" srcset="img/paris-960.webp 960w, img/paris-1672.webp 1672w" sizes="240px" width="1672" height="941" alt="" aria-hidden="true" loading="lazy" decoding="async">
-        <div class="frame">
-          <img src="img/paris-1672.webp" srcset="img/paris-960.webp 960w, img/paris-1672.webp 1672w" sizes="100vw" width="1672" height="941" alt="Viajante com café às margens do Sena e Torre Eiffel ao fundo: imprevistos acontecem, viaje protegido em qualquer destino" loading="lazy" decoding="async">
-        </div>
+      <figure class="slide">
+        <img src="img/mundo-1672.webp" srcset="img/mundo-960.webp 960w, img/mundo-1672.webp 1672w" sizes="100vw" width="1672" height="941" alt="Viajante de chapéu e mochila no Rio de Janeiro: viaje pelo mundo com mais tranquilidade, assistência médica global e suporte 24 horas" loading="lazy" decoding="async">
       </figure>
-      <figure class="slide" style="margin:0">
-        <img class="blur" src="img/embarque-1672.webp" srcset="img/embarque-960.webp 960w, img/embarque-1672.webp 1672w" sizes="240px" width="1672" height="941" alt="" aria-hidden="true" loading="lazy" decoding="async">
-        <div class="frame">
-          <img src="img/embarque-1672.webp" srcset="img/embarque-960.webp 960w, img/embarque-1672.webp 1672w" sizes="100vw" width="1672" height="941" alt="Passageira com passaporte e cartão de embarque olhando o avião pela janela do aeroporto ao nascer do sol" loading="lazy" decoding="async">
-        
-        <figcaption class="slide-copy">
-          <span class="k">COTA SEGURO VIAGEM</span>
-          <span class="h">Seu embarque começa<br><b><span>com tranquilidade</span></b></span>
-        </figcaption>
-        </div>
+      <figure class="slide">
+        <img src="img/paris-1672.webp" srcset="img/paris-960.webp 960w, img/paris-1672.webp 1672w" sizes="100vw" width="1672" height="941" alt="Viajante com café às margens do Sena e Torre Eiffel ao fundo: imprevistos acontecem, viaje protegido em qualquer destino" loading="lazy" decoding="async">
       </figure>
     </div>
     <div class="dots" id="dots" role="tablist" aria-label="Escolher banner">
@@ -536,17 +526,19 @@ footer .wrap{padding-block:56px 32px;display:grid;gap:36px}
                 <button type="button" class="btn btn-ghost" id="paxok">Pronto</button>
               </div>
             </div>
+            <div class="field f-go">
+              <span class="lbl" aria-hidden="true">&nbsp;</span>
+              <button class="btn btn-primary" type="submit" id="go"><svg><use href="#i-plane"/></svg>Ver preços</button>
+            </div>
           </div>
 
-          <p class="hint" id="hint-eu">Para a Europa, o Tratado de Schengen exige cobertura médica mínima de 30 mil euros. Todos os planos listados para esse destino servem para apresentar na imigração.</p>
-
-          <div class="pass-actions">
-            <button class="btn btn-primary" type="submit" id="go"><svg><use href="#i-plane"/></svg>Ver preços agora</button>
+          <div class="pass-foot">
             <div class="ticks">
               <span><svg><use href="#i-check"/></svg>Sem cadastro para cotar</span>
               <span><svg><use href="#i-check"/></svg>Assistência 24h</span>
               <span><svg><use href="#i-check"/></svg>Planos GTA</span>
             </div>
+            <p class="hint" id="hint-eu">Europa: Schengen exige 30 mil euros de cobertura médica. Todos os planos atendem.</p>
           </div>
         </div>
 
@@ -558,8 +550,8 @@ footer .wrap{padding-block:56px 32px;display:grid;gap:36px}
             <b id="s-code">EUR</b>
           </div>
           <div class="stub-grid">
-            <div><span class="lbl">Ida</span><b id="s-ida">—</b></div>
-            <div><span class="lbl">Volta</span><b id="s-volta">—</b></div>
+            <div class="s-dates"><span class="lbl">Ida</span><b id="s-ida">—</b></div>
+            <div class="s-dates"><span class="lbl">Volta</span><b id="s-volta">—</b></div>
             <div><span class="lbl">Dias</span><b id="s-dias">—</b></div>
             <div><span class="lbl">Pax</span><b id="s-pax">1</b></div>
           </div>
@@ -706,7 +698,7 @@ footer .wrap{padding-block:56px 32px;display:grid;gap:36px}
   <div class="wrap">
     <div class="foot-grid">
       <div>
-        <img src="img/logo.webp" width="560" height="196" alt="Cota Seguro Viagem" loading="lazy">
+        <img src="img/logo.webp" width="560" height="188" alt="Cota Seguro Viagem" loading="lazy">
         <p>Cotação e contratação online de seguro viagem nacional e internacional.</p>
       </div>
       <div>
@@ -788,7 +780,7 @@ document.addEventListener("visibilitychange",()=>hero.classList.toggle("paused",
 let sx=null; hero.addEventListener("touchstart",e=>sx=e.touches[0].clientX,{passive:true});
 hero.addEventListener("touchend",e=>{if(sx==null)return;const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>40){show(cur+(dx<0?1:-1));play()} sx=null});
 // pré-carrega os outros banners quando a página termina de carregar
-addEventListener("load",()=>slides.slice(1).forEach(s=>{const i=new Image();i.srcset=s.querySelector(".frame img").srcset;i.sizes="100vw"}));
+addEventListener("load",()=>slides.slice(1).forEach(s=>{const i=new Image();i.srcset=s.querySelector("img").srcset;i.sizes="100vw"}));
 play();
 
 /* ---------- formulário ---------- */
